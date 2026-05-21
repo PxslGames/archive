@@ -1,0 +1,9 @@
+{
+    "note": "don't upload this file, as you will corrupt the database, just keep this here for testing, there is already a data.json file in gcp",
+    "token": "",
+    "yaps": {},
+    "last_xp": {},
+    "vc_last_xp": {},
+    "xp": {},
+    "blacklist": []
+}
