@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/png" href="/assets/favicon.png" />
+<title>pxsl.dev | drive — access tons of useful and funny files, uploaded by pxsl.</title>
+<link rel="stylesheet" href="/global/style.css" />
+<style>
+body, * { cursor: none !important; }
+#file-list { max-width: 900px; margin: 0 auto; background: #111; border: 2px solid #222; border-radius: 8px; padding: 20px; text-align: left; animation: fadeIn 1s ease forwards; }
+.item { display: flex; align-items: center; padding: 6px 10px; border-radius: 4px; transition: background 0.2s ease; }
+.item:hover { background: #1a1a1a; }
+.folder { font-weight: bold; cursor: pointer; color: #9b5de5; }
+.folder::before { content: "📁 "; margin-right: 8px; }
+.file { color: #fff; }
+.file::before { content: "📄 "; margin-right: 8px; }
+.download-link { margin-left: auto; color: #b890ff; text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease; }
+.download-link:hover { color: #9b5de5; }
+.subfolder { margin-left: 20px; }
+button.copy-btn { margin-left: auto; background: none; border: none; color: #b890ff; cursor: pointer; font-size: 1rem; transition: color 0.3s ease; }
+button.copy-btn:hover { color: #9b5de5; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><a href="https://pxsl.dev">pxsl.dev</a></h1>
+  <nav>
+    <a href="https://pxsl.dev/">🏠 | home</a>
+    <a href="/about/">🧃 | about</a>
+    <a href="/tools/">🛠 | tools</a>
+    <a href="/fun/">🎉 | fun</a>
+    <a href="/products/">💻 | products</a>
+    <a href="/drive/">🗄️ | drive</a>
+    <a href="https://pxslgames.github.io/pxsl.old/">💀 | archived</a>
+  </nav>
+</header>
+
+<main>
+  <div id="file-list">Loading files...</div>
+</main>
+
+<footer>
+  built with ✨ by <a href="https://github.com/PxslGames" rel="nofollow noopener noreferrer" target="_blank">Pxsl</a> |
+  <a href="/legal/" rel="noopener noreferrer">Privacy & Terms</a>
+</footer>
+
+<div class="cursor-circle" id="cursor"></div>
+
+<script>
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => alert(`Copied: ${text}`));
+}
+
+const owner = "PxslGames";
+const repo = "pxsl.dev";
+const fileList = document.getElementById("file-list");
+
+async function fetchContents(path = "storage", container) {
+  try {
+    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
+    if (!response.ok) throw new Error(`Failed to fetch files at path: ${path}`);
+    const items = await response.json();
+
+    for (const item of items) {
+      const el = document.createElement("div");
+      el.classList.add("item");
+
+      const fullPath = item.path;
+      el.dataset.path = fullPath;
+
+      if(item.type === "dir") {
+        el.classList.add("folder");
+        const folderName = document.createElement("span");
+        folderName.textContent = item.name;
+        el.appendChild(folderName);
+
+        const subContainer = document.createElement("div");
+        subContainer.classList.add("subfolder");
+        subContainer.style.display = "none";
+        container.appendChild(el);
+        container.appendChild(subContainer);
+
+        let loaded = false;
+        const toggleFolder = () => {
+          if(subContainer.style.display === "none") {
+            subContainer.style.display = "block";
+            if(!loaded) { fetchContents(fullPath, subContainer); loaded = true; }
+          } else {
+            subContainer.style.display = "none";
+          }
+        };
+        el.addEventListener("click", toggleFolder);
+
+      } else if(item.type === "file") {
+        el.classList.add("file");
+        const link = document.createElement("a");
+        link.href = item.download_url;
+        link.textContent = item.name;
+        link.target = "_blank";
+        link.className = "download-link";
+        el.appendChild(link);
+
+        const copyBtn = document.createElement("button");
+        copyBtn.textContent = "🔗";
+        copyBtn.className = "copy-btn";
+        copyBtn.title = "Copy file URL";
+        copyBtn.addEventListener("click", () => copyToClipboard(item.download_url));
+        el.appendChild(copyBtn);
+
+        container.appendChild(el);
+      }
+    }
+
+  } catch(err) {
+    container.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+    console.error(err);
+  }
+}
+
+fileList.innerHTML = "";
+fetchContents("storage", fileList);
+</script>
+
+<script src="/global/snow.js"></script>
+<script src="/global/cookiesbanner.js"></script>
+</body>
+</html>

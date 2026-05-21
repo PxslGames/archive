@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Primary SEO -->
+  <title>pxsl.dev | bio - independent software dev & creative projects</title>
+  <meta name="description" content="Hi, I'm Pxsl — an independent software developer crazy about creative projects and weird tools. Explore my world of mod menus, cool websites, and chaotic energy at pxsl.dev." />
+  <meta name="keywords" content="Pxsl, pxsl.dev, bio, independent developer, software dev, creative projects, mod menus, weird tools, chaotic projects" />
+  <meta name="author" content="Pxsl" />
+  <meta name="robots" content="index, follow" />
+  <meta name="googlebot" content="index, follow" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://pxsl.dev/about/" />
+
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+
+  <!-- Open Graph / Facebook / Discord -->
+  <meta property="og:title" content="pxsl.dev | bio — independent software dev & creative projects" />
+  <meta property="og:description" content="Hi, I'm Pxsl — an independent software developer crazy about creative projects and weird tools. Explore my world of mod menus, cool websites, and chaotic energy at pxsl.dev." />
+  <meta property="og:url" content="https://pxsl.dev/about/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="pxsl.dev" />
+  <meta property="og:locale" content="en_GB" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@PxslGames" />
+  <meta name="twitter:creator" content="@Pxsl" />
+  <meta name="twitter:title" content="pxsl.dev | bio — independent software dev & creative projects" />
+  <meta name="twitter:description" content="Hi, I'm Pxsl — an independent software developer crazy about creative projects and weird tools. Explore my world of mod menus, cool websites, and chaotic energy at pxsl.dev." />
+
+  <!-- Theme color for mobile -->
+  <meta name="theme-color" content="#1e1b2f" />
+
+  <!-- Manifest -->
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Structured Data: Person Profile -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Pxsl",
+    "url": "https://pxsl.dev/about/",
+    "sameAs": [
+      "https://www.youtube.com/@PxslOnYT",
+      "https://github.com/PxslGames",
+      "https://discord.gg/9QDjPsE7bQ",
+      "https://pxslgames.github.io/pxsl.dev2/"
+    ],
+    "jobTitle": "Independent Software Developer",
+    "description": "Independent software dev, crazy about creative projects and weird tools. Maker of mod menus and cool websites."
+  }
+  </script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../global/style.css" />
+  <link rel="stylesheet" href="about.css" />
+</head>
+
+<div id="enterOverlay">
+  <div>click anywhere to enter</div>
+  <small style="margin-top: 10px; font-size: 1rem; color: #aaa;">music may be loud!</small>
+</div>
+
+<body>
+  <header>
+    <h1><a href="https://pxsl.dev">pxsl.dev</a></h1>
+    <nav>
+      <a href="https://pxsl.dev/">🏠 | home</a>
+      <a href="/about/" aria-current="page">🧃 | about</a>
+      <a href="/tools/">🛠 | tools</a>
+      <a href="/fun/">🎉 | fun</a>
+      <a href="/products/">💻 | products</a>
+      <a href="/drive/">🗄️ | drive</a>
+      <a href="https://pxslgames.github.io/pxsl.old/">💀 | archived</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>hi, i'm <span id="typingText" class="highlight"></span></h2>
+
+    <p class="bio-intro">
+      Independent software dev, crazy about creative projects and weird tools. 
+      I make whatever I feel like - from mod menus to cool websites.
+      Welcome to my corner of the web, pxsl.dev!
+    </p>
+
+    <div class="langs">
+      <h3>my favourite coding languages</h3>
+      <ul>
+        <li>Python</li>
+        <li>c#</li>
+      </ul>
+    </div>
+
+    <div class="status" id="statusText">
+      Loading status...
+    </div>
+
+    <div class="links">
+      <a href="https://www.youtube.com/@pxsldev1">📺 YouTube</a>
+      <a href="https://github.com/PxslGames">🐙 GitHub</a>
+      <a href="https://discord.gg/9QDjPsE7bQ">🗨️ Discord</a>
+      <a href="https://pxsl.dev">🌐 pxsl.dev</a>
+      <a href="https://www.tiktok.com/@pxsldev1">🎵 TikTok</a>
+      <a href="https://pxsldev1.itch.io/">💻 itch.io</a>
+      <a href="https://pxslgames.github.io/pxsl.old/">💀 Archived Site</a>
+    </div>
+    
+    <div id="audioPlayerContainer" style="display:none;">
+      <div id="songName"></div>
+      <button id="prevBtn">⏮️</button>
+      <button id="playPauseBtn">▶️</button>
+      <button id="nextBtn">⏭️</button>
+      <input type="range" id="volumeControl" min="0" max="1" step="0.01">
+    </div>
+  </main>
+
+  <footer>
+    built with ✨ by <a href="https://github.com/PxslGames" rel="nofollow noopener noreferrer" target="_blank">Pxsl</a> |
+    <a href="/legal/" rel="noopener noreferrer">Privacy & Terms</a>
+  </footer>
+
+  <script>
+    const songs = [
+      "music/dieyoungskepsisremix.mp3",
+      "music/help_urselfpheedit.mp3",
+      "music/psychodreamspheedit.mp3",
+      "music/healthriskfms.mp3",
+      "music/uncomfortablebou.mp3",
+    ];
+
+    const songnames = [
+      "die young (Skepsis Remix)",
+      "help_urself (PHE Edit)",
+      "Psycho Dreams (PHE Edit)",
+      "Health Risk - FMS",
+      "Uncomfortable - Bou",
+    ];
+
+    const overlay = document.getElementById("enterOverlay");
+    const playerContainer = document.getElementById("audioPlayerContainer");
+    const songNameEl = document.getElementById("songName");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const volumeControl = document.getElementById("volumeControl");
+
+    let audio;
+    let currentIndex = 0;
+
+    function loadSong(index) {
+      if (!audio) {
+        audio = document.createElement("audio");
+        audio.autoplay = true;
+        audio.loop = false;
+        document.body.appendChild(audio);
+
+        audio.addEventListener("ended", () => {
+          nextSong();
+        });
+      }
+
+      currentIndex = index;
+      audio.src = songs[currentIndex];
+      audio.play();
+      songNameEl.textContent = songnames[currentIndex];
+      playPauseBtn.textContent = "⏸️";
+      volumeControl.value = audio.volume;
+    }
+
+    function playPause() {
+      if (audio.paused) {
+        audio.play();
+        playPauseBtn.textContent = "⏸️";
+      } else {
+        audio.pause();
+        playPauseBtn.textContent = "▶️";
+      }
+    }
+
+    function nextSong() {
+      let nextIndex = (currentIndex + 1) % songs.length;
+      loadSong(nextIndex);
+    }
+
+    function prevSong() {
+      let prevIndex = (currentIndex - 1 + songs.length) % songs.length;
+      loadSong(prevIndex);
+    }
+
+    overlay.addEventListener("click", () => {
+      overlay.style.display = "none";
+      playerContainer.style.display = "flex";
+
+      const randomIndex = Math.floor(Math.random() * songs.length);
+      loadSong(randomIndex);
+    });
+
+    playPauseBtn.addEventListener("click", playPause);
+    nextBtn.addEventListener("click", nextSong);
+    prevBtn.addEventListener("click", prevSong);
+    volumeControl.addEventListener("input", (e) => {
+      audio.volume = e.target.value;
+    });
+  </script>
+
+  <script>
+  const typingElement = document.getElementById("typingText");
+  const texts = ["Pxsl", "ghooldev", "pxsl.dev"];
+  let textIndex = 0;
+  let charIndex = 0;
+  let typingSpeed = 120;
+  let pauseTime = 1000;
+
+  function type() {
+    const currentText = texts[textIndex];
+    if (charIndex < currentText.length) {
+      typingElement.textContent += currentText[charIndex];
+      charIndex++;
+      setTimeout(type, typingSpeed);
+    } else {
+      setTimeout(erase, pauseTime);
+    }
+  }
+
+  function erase() {
+    if (charIndex > 0) {
+      typingElement.textContent = typingElement.textContent.slice(0, -1);
+      charIndex--;
+      setTimeout(erase, typingSpeed / 2);
+    } else {
+      textIndex = (textIndex + 1) % texts.length;
+      setTimeout(type, typingSpeed);
+    }
+  }
+
+  window.addEventListener("load", () => {
+    setTimeout(type, 500);
+  });
+  </script>
+
+  <script>
+  fetch('status.json?nocache=${Date.now()}')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch status.json');
+      }
+      return response.json();
+    })
+    .then(data => {
+      const statusEl = document.getElementById('statusText');
+      statusEl.innerHTML = `Currently working on: <strong>${data.status}</strong>`;
+    })
+    .catch(error => {
+      console.error('Error loading status:', error);
+      document.getElementById('statusText').textContent = 'Currently working on: [unable to load status]';
+    });
+  </script>
+
+  <script src="/global/snow.js"></script>
+  <script src="/global/cursor.js"></script>
+  <script src="/global/cookiesbanner.js"></script>
+</body>
+
+</html>

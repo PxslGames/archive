@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary SEO -->
+  <title>pxsl.dev | a collection of stupid projects, weird tools, and pure energy</title>
+  <meta name="description" content="pxsl.dev is an independent software developer's playground filled with chaotic tools, stupid projects, weird utilities, and pure chaotic energy. Explore fun, utilities, and experimental web stuff." />
+  <meta name="keywords" content="pxsl, pxsl.dev, dev tools, chaotic tools, weird web projects, fun web tools, stupid projects, image playground, base64, discord bot, gaming, indie developer" />
+  <meta name="author" content="Pxsl" />
+  <meta name="robots" content="index, follow" />
+  <meta name="googlebot" content="index, follow" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://pxsl.dev/" />
+
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+
+  <!-- Open Graph / Facebook / Discord -->
+  <meta property="og:title" content="pxsl.dev | chaotic tools and stupid projects" />
+  <meta property="og:description" content="A collection of stupid projects, weird tools, and pure energy from independent dev Pxsl." />
+  <meta property="og:url" content="https://pxsl.dev/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="pxsl.dev" />
+  <meta property="og:locale" content="en_GB" />
+  <meta property="og:image:alt" content="pxsl.dev logo and chaotic projects" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@PxslGames" />
+  <meta name="twitter:creator" content="@Pxsl" />
+  <meta name="twitter:title" content="pxsl.dev | chaotic tools and stupid projects" />
+  <meta name="twitter:description" content="A collection of stupid projects, weird tools, and pure energy from independent dev Pxsl." />
+  <meta name="twitter:image:alt" content="pxsl.dev logo and chaotic projects" />
+
+  <!-- Theme color for mobile -->
+  <meta name="theme-color" content="#1e1b2f" />
+
+  <!-- Manifest -->
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Structured Data: WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://pxsl.dev/",
+    "name": "pxsl.dev",
+    "author": {
+      "@type": "Person",
+      "name": "Pxsl"
+    },
+    "description": "A collection of stupid projects, weird tools, and pure energy from independent dev Pxsl."
+  }
+  </script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="global/style.css" />
+</head>
+<body>
+  <div class="cursor-circle" id="cursor"></div>
+
+  <header>
+    <h1><a href="https://pxsl.dev">pxsl.dev</a></h1>
+    <nav>
+      <a href="https://pxsl.dev/">🏠 | home</a>
+      <a href="/about/">🧃 | about</a>
+      <a href="/tools/">🛠 | tools</a>
+      <a href="/fun/">🎉 | fun</a>
+      <a href="/products/">💻 | products</a>
+      <a href="/drive/">🗄️ | drive</a>
+      <a href="https://pxslgames.github.io/pxsl.old/">💀 | archived</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>welcome to <span class="highlight">pxsl.dev</span></h2>
+    <p>a collection of stupid projects, weird tools, and pure energy.</p>
+
+    <p id="about-me">About Me &lt;&gt; I'm an independent software dev, and I basically just make whatever I feel like. I hope you enjoy my platform: pxsl.dev! (v1.0.0)</p>
+
+    <div class="links">
+      <a href="/about/">🧃 | about</a>
+      <a href="/tools/">🛠️ | tools</a>
+      <a href="/fun/">🎉 | fun</a>
+      <a href="/products/">💻 | products</a>
+      <a href="/drive/">🗄️ | drive</a>
+      <a href="https://pxslgames.github.io/pxsl.old/">💀 archived (a bit broken)</a>
+    </div>
+  </main>
+
+  <footer>
+    built with ✨ by <a href="https://github.com/PxslGames" rel="nofollow noopener noreferrer" target="_blank">Pxsl</a> |
+    <a href="/legal/" rel="noopener noreferrer">Privacy & Terms</a>
+  </footer>
+
+  <script>
+  async function getAllDeployments(repo) {
+      let deployments = [];
+      let url = `https://api.github.com/repos/${repo}/deployments?per_page=100&page=1`;
+
+      while (url) {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error("GitHub API error");
+
+          const data = await response.json();
+          deployments = deployments.concat(data);
+
+          const link = response.headers.get('Link');
+          if (link && link.includes('rel="next"')) {
+              const match = link.match(/<([^>]+)>;\s*rel="next"/);
+              url = match ? match[1] : null;
+          } else {
+              url = null;
+          }
+      }
+
+      return deployments.length;
+  }
+
+  async function updateVersion() {
+      const p = document.getElementById("about-me");
+
+      try {
+          let deploymentCount = await getAllDeployments("PxslGames/pxsl.dev");
+
+          const patchesPerMinor = 10;
+          const minorsPerMajor = 10;
+
+          deploymentCount = deploymentCount - 1;
+
+          const major = 1 + Math.floor(deploymentCount / (patchesPerMinor * minorsPerMajor));
+          const minor = Math.floor((deploymentCount % (patchesPerMinor * minorsPerMajor)) / patchesPerMinor);
+          const patch = deploymentCount % patchesPerMinor;
+
+          const version = `v${major}.${minor}.${patch}`;
+          p.innerHTML = p.innerHTML.replace(/\(v\d+\.\d+\.\d+\)/, `(${version})`);
+
+      } catch (err) {
+          console.error("Error fetching deployments:", err);
+      }
+  }
+
+  updateVersion();
+  </script>
+
+  <script src="/global/snow.js"></script>
+  <script src="/global/cursor.js"></script>
+  <script src="/global/cookiesbanner.js"></script>
+</body>
+</html>
