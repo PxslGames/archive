@@ -17,7 +17,15 @@ const REPO = "archive";
 const BRANCH = "main";
 
 async function openDir(path = "") {
-    const api = `https://api.github.com/repos/${USER}/${REPO}/contents/${path}?ref=${BRANCH}`;
+
+    history.replaceState(
+        null,
+        "",
+        `?path=${encodeURIComponent(path)}`
+    );
+
+    const api =
+        `https://api.github.com/repos/${USER}/${REPO}/contents/${path}?ref=${BRANCH}`;
 
     const res = await fetch(api);
     const data = await res.json();
@@ -30,6 +38,7 @@ async function openDir(path = "") {
     filesDiv.innerHTML = "";
 
     if (path !== "") {
+
         const up = document.createElement("a");
 
         let split = path.split("/");
@@ -39,6 +48,7 @@ async function openDir(path = "") {
 
         up.href = "#";
         up.textContent = "../";
+
         up.onclick = (e) => {
             e.preventDefault();
             openDir(parent);
@@ -50,38 +60,53 @@ async function openDir(path = "") {
     }
 
     data.forEach(file => {
+
         const a = document.createElement("a");
 
         a.href = "#";
 
         if (file.type === "dir") {
+
             a.textContent = file.name + "/";
 
             a.onclick = (e) => {
                 e.preventDefault();
                 openDir(file.path);
             };
+
         } else {
+
             a.textContent = file.name;
 
             a.onclick = (e) => {
+
                 e.preventDefault();
 
-                if (
+                if (file.name.endsWith(".html")) {
+
+                    const renderedUrl =
+                        `https://archive.pxsl.dev/${file.path}`;
+
+                    window.open(renderedUrl, "_blank");
+
+                } else if (
                     file.name.endsWith(".png") ||
                     file.name.endsWith(".jpg") ||
                     file.name.endsWith(".jpeg") ||
                     file.name.endsWith(".gif") ||
                     file.name.endsWith(".webp") ||
-                    file.name.endsWith(".html") ||
                     file.name.endsWith(".txt") ||
                     file.name.endsWith(".js") ||
                     file.name.endsWith(".json") ||
                     file.name.endsWith(".css")
                 ) {
+
                     window.open(file.download_url, "_blank");
+
                 } else {
+
                     window.location.href = file.download_url;
+
                 }
             };
         }
@@ -91,7 +116,10 @@ async function openDir(path = "") {
     });
 }
 
-openDir();
+const params = new URLSearchParams(window.location.search);
+const startPath = params.get("path") || "";
+
+openDir(startPath);
 </script>
 
 </body>
